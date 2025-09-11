@@ -2,18 +2,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Runtime.InteropServices;
 
 public class ScoreAttackGame : MonoBehaviour
 {
     [Header("UI")]
-    [SerializeField] private TextMeshProUGUI timerText;       // タイマー
-    [SerializeField] private TextMeshProUGUI scoreText;       // スコア
-    [SerializeField] private Button tapButton;         // 連打ボタン
-    [SerializeField] private Button startButton;       // スタートボタン
+    [SerializeField] private TextMeshProUGUI timerText;       
+    [SerializeField] private TextMeshProUGUI scoreText;       
+
+    [SerializeField] private Button tapButton;         
+    [SerializeField] private Button startButton;       
+
     [SerializeField] private GameObject InGameObject;
+    [SerializeField] private GameObject OutGameObject;
+    [SerializeField] private GameObject StartEffect;
+
+    [SerializeField] private Animator animator;
+    [SerializeField] private Animator animator_human;
 
     [Header("Game Settings")]
-    [SerializeField] private float gameTime;     // 制限時間
+    [SerializeField] private float gameTime;     
 
     private float timeRemaining;
     private int score;
@@ -26,6 +34,7 @@ public class ScoreAttackGame : MonoBehaviour
         tapButton.interactable = false; 
         InGameObject.SetActive(false);
         UpdateUI();
+        StartEffect.SetActive(false);
     }
 
     void Update()
@@ -39,6 +48,11 @@ public class ScoreAttackGame : MonoBehaviour
             }
             UpdateTimer();
         }
+
+        if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+        {
+            StartEffect.SetActive(false);
+        }
     }
 
     private void StartGame()
@@ -49,6 +63,9 @@ public class ScoreAttackGame : MonoBehaviour
 
         tapButton.interactable = true;
         InGameObject.SetActive(true);
+        OutGameObject.SetActive(false);
+        StartEffect.SetActive(true);
+
         UpdateUI();
     }
 
@@ -56,6 +73,7 @@ public class ScoreAttackGame : MonoBehaviour
     {
         isPlaying = false;
         InGameObject.SetActive(false);
+        OutGameObject.SetActive(true);
         tapButton.interactable = false;
     }
 
@@ -64,6 +82,7 @@ public class ScoreAttackGame : MonoBehaviour
         if (isPlaying)
         {
             score += 1;
+            EatOyster();
             UpdateScore();
         }
     }
@@ -72,6 +91,12 @@ public class ScoreAttackGame : MonoBehaviour
     {
         UpdateTimer();
         UpdateScore();
+        BlackBandAnimation();
+    }
+
+    private void BlackBandAnimation()
+    {
+        animator.SetTrigger("StartEffectTrigger");
     }
 
     private void UpdateTimer()
@@ -82,5 +107,10 @@ public class ScoreAttackGame : MonoBehaviour
     private void UpdateScore()
     {
         scoreText.text = "Score: " + score;
+    }
+
+    private void EatOyster()
+    {
+        animator_human.SetTrigger("EatingTrigger");
     }
 }
