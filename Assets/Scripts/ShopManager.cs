@@ -9,23 +9,33 @@ using static UnityEditor.Progress;
 public class ShopManager : MonoBehaviour
 {
     [SerializeField] private RectTransform ParentRectTransForm;
-    [SerializeField] private GameObject Buttonprefab;
     [SerializeField] private GameObject ShopPanel;
+
+    [SerializeField] private GameObject CoinShop;
+    [SerializeField] private GameObject ScoreShop;
+    [SerializeField] private GameObject CriticalShop;
+    [SerializeField] private GameObject AutoClickShop;
+    [SerializeField] private GameObject TimeShop;
+    [SerializeField] private GameObject LuckShop;
+
 
     [SerializeField] private JsonManager jsonManager;
 
     private void Start()
     {
-        CreateButton();
+        ShopPanel.SetActive(false);
     }
 
     public void OpenShopButton()
     {
         ShopPanel.SetActive(true);
     }
-
-    private void CreateButton()
+    
+    public void CloseShopButton()
     {
-        var obj = Instantiate(Buttonprefab,ParentRectTransForm);
+        ShopPanel.SetActive(false);
     }
+
+    
+
 }

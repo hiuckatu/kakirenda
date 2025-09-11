@@ -42,7 +42,7 @@ public class JsonManager : MonoBehaviour
             level_critical = 0,
             level_autoClick = 0,
             level_time = 0,
-            level_lack = 0,
+            level_luck = 0,
         };
 
         Directory.CreateDirectory(Path.GetDirectoryName(FilePath));
@@ -100,6 +100,6 @@ public class JsonManager : MonoBehaviour
         public int level_critical;
         public int level_autoClick;
         public int level_time;
-        public int level_lack;
+        public int level_luck;
     }
 }
