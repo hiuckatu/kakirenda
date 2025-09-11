@@ -1,0 +1,11 @@
+{
+    "money": 0,
+    "MaxScore": 0.0,
+    "TotalScore": 0.0,
+    "level_money": 0,
+    "level_score": 0,
+    "level_critical": 0,
+    "level_autoClick": 0,
+    "level_time": 0,
+    "level_lack": 0
+}
