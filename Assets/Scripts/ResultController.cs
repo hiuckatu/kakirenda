@@ -1,24 +1,24 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ResultController : MonoBehaviour
 {
     [SerializeField] Animator animator;
     [SerializeField] Animator EndTextAnim;
+    [SerializeField] Animator BackHomeButonAnim;
 
     [SerializeField] GameObject ResultUI;
     [SerializeField] GameObject EndText;
+    [SerializeField] GameObject BackHomeButton;
 
-    [SerializeField] private GameObject ResultText;
+    [SerializeField] private GameObject[] ResultObjects; // 順番に表示したいオブジェクトを配列で指定
 
-    [SerializeField] private GameObject OutGameObject; 
+    [SerializeField] private GameObject OutGameObject;
 
-    private bool _flag;
 
     void Start()
     {
-        HideResultUI();
+        OnClickBackHomeButton();
     }
 
     void Update()
@@ -35,11 +35,11 @@ public class ResultController : MonoBehaviour
     {
         ResultUI.SetActive(false);
         EndText.SetActive(false);
+        BackHomeButton.SetActive(false);
 
-        // 子オブジェクトを全て非表示にしておく
-        foreach (Transform child in ResultText.transform)
+        foreach (GameObject obj in ResultObjects)
         {
-            child.gameObject.SetActive(false);
+            obj.SetActive(false);
         }
     }
 
@@ -61,10 +61,27 @@ public class ResultController : MonoBehaviour
     {
         yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1);
 
-        foreach (Transform child in ResultText.transform)
+        for (int i = 0; i < ResultObjects.Length; i++)
         {
             yield return new WaitForSeconds(1f);
-            child.gameObject.SetActive(true);
+            ResultObjects[i].SetActive(true);
+
+            if (i == ResultObjects.Length - 1)
+            {
+                ResultButtonAnim();
+            }
         }
+    }
+
+    private void ResultButtonAnim()
+    {
+        BackHomeButton.SetActive(true);
+        BackHomeButonAnim.SetTrigger("BackHomeTrigger");
+    }
+
+    public void OnClickBackHomeButton()
+    {
+        HideResultUI();
+        OutGameObject.SetActive(true);
     }
 }
