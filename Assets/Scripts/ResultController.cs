@@ -15,7 +15,7 @@ public class ResultController : MonoBehaviour
 
     [SerializeField] private GameObject OutGameObject;
 
-
+    [SerializeField] private AudioManager audioManager;
     void Start()
     {
         OnClickBackHomeButton();
@@ -63,11 +63,12 @@ public class ResultController : MonoBehaviour
 
         for (int i = 0; i < ResultObjects.Length; i++)
         {
-            yield return new WaitForSeconds(1.35f);
+            yield return new WaitForSeconds(1.1f);
             ResultObjects[i].SetActive(true);
 
             if (i == ResultObjects.Length - 1)
             {
+                audioManager.PlayResultSound();
                 ResultButtonAnim();
             }
         }
@@ -82,6 +83,7 @@ public class ResultController : MonoBehaviour
     public void OnClickBackHomeButton()
     {
         HideResultUI();
+        audioManager.EndGameSoundStop();
         OutGameObject.SetActive(true);
     }
 }

@@ -35,9 +35,12 @@ public class ScoreAttackGame : MonoBehaviour
     [Header("ResultScripts")]
     [SerializeField] private ResultController resultController;
 
-    [Header("DamageText")]
+    [Header("CountText")]
     [SerializeField] private GameObject CountTextPrefab;
     [SerializeField] private Transform CountTextParent;
+
+    [Header("Audio")]
+    [SerializeField] private AudioManager audioManager;
 
     private float timeRemaining;
     private float score;
@@ -107,6 +110,8 @@ public class ScoreAttackGame : MonoBehaviour
         isPlaying = true;
 
         tapButton.interactable = true;
+
+        audioManager.StartGameSound();
 
         InGameObject.SetActive(true);
         OutGameObject.SetActive(false);
