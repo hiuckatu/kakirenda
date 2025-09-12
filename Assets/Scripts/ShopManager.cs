@@ -10,7 +10,7 @@ public class ShopManager : MonoBehaviour
     [SerializeField] private ShopItemUI[] shopItemUIs;
 
     [Header("UI表示用")]
-    [SerializeField] private TMP_Text moneyText;   // ← 所持金を表示するテキスト
+    [SerializeField] private TMP_Text moneyText;
 
     private void Start()
     {
@@ -22,7 +22,7 @@ public class ShopManager : MonoBehaviour
     public void OpenShopButton()
     {
         ShopPanel.SetActive(true);
-        UpdateMoneyText(); // 開いたときに最新の金額を表示
+        UpdateMoneyText();
     }
 
     public void CloseShopButton() => ShopPanel.SetActive(false);
@@ -49,7 +49,7 @@ public class ShopManager : MonoBehaviour
             Debug.Log($"カテゴリ {category} をレベル {currentLevel + 1} にアップ！ 残金: {data.money}");
 
             UpdateShopUI(category);
-            UpdateMoneyText();  // ← 所持金テキスト更新
+            UpdateMoneyText();
         }
         else
         {

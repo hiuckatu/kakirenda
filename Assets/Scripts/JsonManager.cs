@@ -69,19 +69,50 @@ public class JsonManager : MonoBehaviour
         Debug.Log("データを保存しました。");
     }
 
-    // money所持数加減算
-    public void AddItemCount(int addCount)
+    public enum SaveDataType
+    {
+        Money,
+        MaxScore,
+        TotalScore
+    }
+
+    public void AddValue(SaveDataType type, float addValue)
     {
         var data = LoadData();
-        data.money = Mathf.Max(0, data.money + addCount);
+
+        switch (type)
+        {
+            case SaveDataType.Money:
+                data.money = Mathf.Max(0, data.money + (int)addValue);
+                break;
+            case SaveDataType.MaxScore:
+                data.MaxScore = Mathf.Max(0, data.MaxScore + addValue);
+                break;
+            case SaveDataType.TotalScore:
+                data.TotalScore = Mathf.Max(0, data.TotalScore + addValue);
+                break;
+        }
+
         SaveData(data);
     }
 
-    // money所持数上書き
-    public void SetItemCount(int count)
+    public void SetValue(SaveDataType type, float value)
     {
         var data = LoadData();
-        data.money = Mathf.Max(0, count);
+
+        switch (type)
+        {
+            case SaveDataType.Money:
+                data.money = Mathf.Max(0, (int)value);
+                break;
+            case SaveDataType.MaxScore:
+                data.MaxScore = Mathf.Max(0, value);
+                break;
+            case SaveDataType.TotalScore:
+                data.TotalScore = Mathf.Max(0, value);
+                break;
+        }
+
         SaveData(data);
     }
 
