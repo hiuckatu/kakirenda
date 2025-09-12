@@ -12,6 +12,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip ResultSE;
 
     [SerializeField] private AudioClip bgmClip;           // ÉQÅ[ÉÄíÜBGM
+    [SerializeField] private AudioClip OpeningSE;
 
     void Start()
     {
@@ -50,5 +51,14 @@ public class AudioManager : MonoBehaviour
     public void PlayResultSound()
     {
         seAudioSource.PlayOneShot(ResultSE);
+    }
+
+    public void PlayOpeningSound()
+    {
+        seAudioSource.PlayOneShot(OpeningSE);
+    }
+    public void PlayOpeningBGM()
+    {
+        seAudioSource.PlayOneShot(bgmClip);
     }
 }
