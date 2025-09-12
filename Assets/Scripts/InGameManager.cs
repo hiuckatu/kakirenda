@@ -88,7 +88,6 @@ public class ScoreAttackGame : MonoBehaviour
     {
         isPlaying = false;
         InGameObject.SetActive(false);
-        OutGameObject.SetActive(true);
         tapButton.interactable = false;
         resultController.ShowEndEffect();
         jsonManager.AddValue(JsonManager.SaveDataType.Money, InGamemoney);
@@ -134,18 +133,18 @@ public class ScoreAttackGame : MonoBehaviour
 
     private void UpdateTimer()
     {
-        timerText.text = "Time: " + Mathf.Max(0, timeRemaining).ToString("F1");
+        timerText.text = "残り時間: " + Mathf.Max(0, timeRemaining).ToString("F1") + "秒";
     }
 
     private void UpdateScore()
     {
-        scoreText.text = "Score: " + score;
+        scoreText.text = "スコア: " + score;
     }
 
     private void UpdateMoneyUI()
     {
         if (moneyText != null)
-            moneyText.text = "Coins: " + InGamemoney;
+            moneyText.text = "獲得コイン: " + InGamemoney;
     }
 
     private void EatOysterAnimation()

@@ -2350,7 +2350,7 @@ MonoBehaviour:
   animator_human: {fileID: 1613209290}
   jsonManager: {fileID: 1784975473}
   gameTime: 30
-  resultController: {fileID: 0}
+  resultController: {fileID: 615372064}
   coinChance: 0.28
 --- !u!1 &475272048
 GameObject:
@@ -2866,9 +2866,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 692181465}
-  animator2: {fileID: 0}
+  EndTextAnim: {fileID: 47207675}
   ResultUI: {fileID: 644826785}
   EndText: {fileID: 47207671}
+  ResultText: {fileID: 692181461}
+  OutGameObject: {fileID: 0}
 --- !u!1 &620723625
 GameObject:
   m_ObjectHideFlags: 0
@@ -2903,7 +2905,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: 90.00001}
+  m_AnchoredPosition: {x: 0, y: 90}
   m_SizeDelta: {x: 800, y: 100}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &620723627
