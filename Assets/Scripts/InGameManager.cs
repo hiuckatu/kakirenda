@@ -10,6 +10,8 @@ public class ScoreAttackGame : MonoBehaviour
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI moneyText;
+    [SerializeField] private TextMeshProUGUI scoreText_Result;
+    [SerializeField] private TextMeshProUGUI moneyText_Result;
 
     [Header("Button")]
     [SerializeField] private Button tapButton;
@@ -23,7 +25,7 @@ public class ScoreAttackGame : MonoBehaviour
     [Header("Animator")]
     [SerializeField] private Animator animator;
     [SerializeField] private Animator animator_human;
-    
+
     [Header("Json")]
     [SerializeField] private JsonManager jsonManager;
 
@@ -33,13 +35,24 @@ public class ScoreAttackGame : MonoBehaviour
     [Header("ResultScripts")]
     [SerializeField] private ResultController resultController;
 
+    [Header("DamageText")]
+    [SerializeField] private GameObject CountTextPrefab;
+    [SerializeField] private Transform CountTextParent;
+
     private float timeRemaining;
     private float score;
     private bool isPlaying = false;
 
-    // 追加：所持コイン
-    private int InGamemoney = 0;
-    [SerializeField, Range(0f, 1f)] private float coinChance = 0.28f;
+    private float scoreRatio;
+    private float moneyRatio;
+    private float CriticalRatio;
+    private float AutoClicktimeRatio;
+    private float AddTime;
+    private float LuckValue;
+
+    private float AutoClicktime;
+    private float InGamemoney = 0;
+    [SerializeField, Range(0f, 1f)] private float coinChance;
 
     void Start()
     {
@@ -61,6 +74,13 @@ public class ScoreAttackGame : MonoBehaviour
                 EndGame();
             }
             UpdateTimer();
+
+            AutoClicktime += Time.deltaTime;
+            if (AutoClicktime >= 1.0f / (1f + AutoClicktimeRatio))
+            {
+                AddScore();
+                AutoClicktime = 0f;
+            }
         }
 
         if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
@@ -71,9 +91,19 @@ public class ScoreAttackGame : MonoBehaviour
 
     private void StartGame()
     {
+        var data = jsonManager.LoadData();
+
+        scoreRatio = data.level_score * 0.15f;
+        moneyRatio = data.level_money * 0.10f;
+        CriticalRatio = data.level_critical * 0.12f;
+        AutoClicktimeRatio = 0.323f * Mathf.Log(data.level_autoClick + 1);
+        AddTime = data.level_time * 0.2f;
+        LuckValue = data.level_luck * 0.01f;
+
         score = 0;
         InGamemoney = 0;
-        timeRemaining = gameTime;
+        AutoClicktime = 0f;
+        timeRemaining = gameTime + AddTime;
         isPlaying = true;
 
         tapButton.interactable = true;
@@ -89,6 +119,8 @@ public class ScoreAttackGame : MonoBehaviour
         isPlaying = false;
         InGameObject.SetActive(false);
         tapButton.interactable = false;
+        scoreText_Result.text = scoreText.text;
+        moneyText_Result.text = moneyText.text;
         resultController.ShowEndEffect();
         jsonManager.AddValue(JsonManager.SaveDataType.Money, InGamemoney);
         jsonManager.AddValue(JsonManager.SaveDataType.TotalScore, score);
@@ -102,9 +134,22 @@ public class ScoreAttackGame : MonoBehaviour
     {
         if (isPlaying)
         {
-            score += 1;
+            float addValue = 1.0f + scoreRatio;
+            bool isCritical = false;
+
+            if (Random.value < 0.15f + (LuckValue / 10f))
+            {
+                addValue *= (2.0f + CriticalRatio);
+                isCritical = true;
+            }
+
+            score += addValue;
+
             EatOysterAnimation();
             UpdateScore();
+
+            SpawnCountText("+" + addValue.ToString("F0"), isCritical);
+
             MoneyByDraw();
         }
     }
@@ -119,10 +164,21 @@ public class ScoreAttackGame : MonoBehaviour
 
     private void MoneyByDraw()
     {
-        if (Random.value < coinChance)
+        if (Random.value < (coinChance + LuckValue / 10f))
         {
-            InGamemoney += 1;
+            float addValue = 1f + moneyRatio;
+            bool isCritical = false;
+
+            if (Random.value < 0.15f + (LuckValue / 10f))
+            {
+                addValue *= (2.0f + CriticalRatio);
+                isCritical = true;
+            }
+
+            InGamemoney += addValue;
             UpdateMoneyUI();
+
+            SpawnCountText("Coin +" + addValue.ToString("F0"), isCritical, Color.yellow);
         }
     }
 
@@ -133,22 +189,53 @@ public class ScoreAttackGame : MonoBehaviour
 
     private void UpdateTimer()
     {
-        timerText.text = "残り時間: " + Mathf.Max(0, timeRemaining).ToString("F1") + "秒";
+        timerText.text = "残り時間: " + Mathf.Max(0, timeRemaining).ToString("F2") + "秒";
     }
 
     private void UpdateScore()
     {
-        scoreText.text = "スコア: " + score;
+        scoreText.text = "スコア: " + score.ToString("F0");
     }
 
     private void UpdateMoneyUI()
     {
         if (moneyText != null)
-            moneyText.text = "獲得コイン: " + InGamemoney;
+            moneyText.text = "獲得コイン: " + InGamemoney.ToString("F0");
     }
 
     private void EatOysterAnimation()
     {
         animator_human.SetTrigger("EatingTrigger");
+    }
+
+    private void SpawnCountText(string text, bool isCritical, Color? overrideColor = null)
+    {
+        GameObject obj = Instantiate(CountTextPrefab, CountTextParent);
+        RectTransform rect = obj.GetComponent<RectTransform>();
+
+        float offsetX = Random.Range(-Screen.width * 0.25f, Screen.width * 0.25f);
+        float offsetY = Random.Range(-Screen.height * 0.2f, Screen.height * 0.2f);
+        rect.anchoredPosition = new Vector2(offsetX, offsetY);
+
+        CountTextController dmgText = obj.GetComponent<CountTextController>();
+
+        if (overrideColor.HasValue)
+        {
+            dmgText.SetText(text, overrideColor.Value);
+            rect.localScale = isCritical ? Vector3.one * 1.3f : Vector3.one;
+        }
+        else
+        {
+            if (isCritical)
+            {
+                dmgText.SetText(text, Color.red);
+                rect.localScale = Vector3.one * 1.3f;
+            }
+            else
+            {
+                dmgText.SetText(text, Color.black);
+                rect.localScale = Vector3.one;
+            }
+        }
     }
 }

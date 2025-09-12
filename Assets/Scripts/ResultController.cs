@@ -63,7 +63,7 @@ public class ResultController : MonoBehaviour
 
         for (int i = 0; i < ResultObjects.Length; i++)
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(1.35f);
             ResultObjects[i].SetActive(true);
 
             if (i == ResultObjects.Length - 1)

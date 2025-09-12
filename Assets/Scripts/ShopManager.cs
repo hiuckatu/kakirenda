@@ -109,8 +109,19 @@ public class ShopManager : MonoBehaviour
             shopItemUIs[category].costText.text = $"費用: {needMoney} コイン";
         }
 
-        int percent = currentLevel * 5;
-        shopItemUIs[category].levelText.text = $"Lv.{currentLevel}  +{percent}%";
+        // --- カテゴリごとに表示を変更 ---
+        string effectText = category switch
+        {
+            0 => $"Lv.{currentLevel}  +{currentLevel * 10f}%",           // money
+            1 => $"Lv.{currentLevel}  +{currentLevel * 5f}%",            // score
+            2 => $"Lv.{currentLevel}  +{currentLevel * 12f}%",           // critical
+            3 => $"Lv.{currentLevel}  +{(1f + 0.323f * Mathf.Log(currentLevel + 1)).ToString("F2")}",    // autoClick
+            4 => $"Lv.{currentLevel}  +{currentLevel * 0.2f}秒",        // time
+            5 => $"Lv.{currentLevel}  +{currentLevel * 1f}%",            // luck
+            _ => $"Lv.{currentLevel}"
+        };
+
+        shopItemUIs[category].levelText.text = effectText;
     }
 
     // --- 所持金表示更新 ---
