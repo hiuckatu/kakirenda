@@ -100,7 +100,7 @@ public class ScoreAttackGame : MonoBehaviour
         moneyRatio = data.level_money * 0.10f;
         CriticalRatio = data.level_critical * 0.12f;
         AutoClicktimeRatio = 0.323f * Mathf.Log(data.level_autoClick + 1);
-        AddTime = data.level_time * 0.2f;
+        AddTime = data.level_time * 0.08f;
         LuckValue = data.level_luck * 0.01f;
 
         score = 0;
@@ -151,6 +151,7 @@ public class ScoreAttackGame : MonoBehaviour
             score += addValue;
 
             EatOysterAnimation();
+            audioManager.PlayEatClickSound();
             UpdateScore();
 
             SpawnCountText("+" + addValue.ToString("F0"), isCritical);

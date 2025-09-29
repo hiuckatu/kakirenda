@@ -1977,7 +1977,9 @@ MonoBehaviour:
   bgmAudioSource: {fileID: 980264024}
   startSE: {fileID: 8300000, guid: a9ad80c21ba800e49b3e6d0277d7e0ed, type: 3}
   ResultSE: {fileID: 8300000, guid: fb4a701bc0f9c5d4dabde39c38f256d7, type: 3}
+  clicksound: {fileID: 8300000, guid: c9fbc3bad73514f41877dce78355b7c1, type: 3}
   bgmClip: {fileID: 8300000, guid: 7de538f8b622bf448942d0ca8d7345d9, type: 3}
+  OpeningSE: {fileID: 0}
 --- !u!1 &402799937
 GameObject:
   m_ObjectHideFlags: 0

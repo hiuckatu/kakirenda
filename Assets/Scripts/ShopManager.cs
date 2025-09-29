@@ -116,7 +116,7 @@ public class ShopManager : MonoBehaviour
             1 => $"Lv.{currentLevel}  +{currentLevel * 5f}%",            // score
             2 => $"Lv.{currentLevel}  +{currentLevel * 12f}%",           // critical
             3 => $"Lv.{currentLevel}  +{(1f + 0.323f * Mathf.Log(currentLevel + 1)).ToString("F2")}",    // autoClick
-            4 => $"Lv.{currentLevel}  +{currentLevel * 0.2f}•b",        // time
+            4 => $"Lv.{currentLevel}  +{currentLevel * 0.08f}•b",        // time
             5 => $"Lv.{currentLevel}  +{currentLevel * 1f}%",            // luck
             _ => $"Lv.{currentLevel}"
         };
